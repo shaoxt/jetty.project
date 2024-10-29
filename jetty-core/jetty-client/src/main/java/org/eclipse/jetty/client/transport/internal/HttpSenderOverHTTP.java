@@ -257,14 +257,14 @@ public class HttpSenderOverHTTP extends HttpSender
         protected void onCompleteSuccess()
         {
             super.onCompleteSuccess();
-            release();
+            callback.succeeded();
         }
 
         @Override
         protected void onCompleteFailure(Throwable cause)
         {
             super.onCompleteFailure(cause);
-            callback.failed(cause);
+            release();
         }
 
         private void release()
