@@ -250,7 +250,6 @@ public class HttpSenderOverHTTP extends HttpSender
         protected void onSuccess()
         {
             release();
-            super.succeeded();
         }
 
         @Override
@@ -265,6 +264,7 @@ public class HttpSenderOverHTTP extends HttpSender
         {
             super.onCompleteFailure(cause);
             release();
+            callback.failed(cause);
         }
 
         private void release()
