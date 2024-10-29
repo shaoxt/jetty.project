@@ -312,9 +312,11 @@ public class HttpSenderOverHTTPTest
 
     public static final int CHARS_LENGTH = CHARS.length();
 
-    protected static String getRandomString(int size) {
+    protected static String getRandomString(int size)
+    {
         StringBuilder sb = new StringBuilder(size);
-        while (sb.length() < size) { // length of the random string.
+        while (sb.length() < size)
+        { // length of the random string.
             int index = rnd.nextInt(CHARS_LENGTH);
             sb.append(CHARS.charAt(index));
         }
@@ -375,9 +377,9 @@ public class HttpSenderOverHTTPTest
         int desiredHeadersSize = 20 * 1024;
         int currentHeadersSize = 0;
         int i = 0;
-        while(currentHeadersSize < desiredHeadersSize)
+        while (currentHeadersSize < desiredHeadersSize)
         {
-            final int index = i ++;
+            final int index = i++;
             final String headerValue = getRandomString(800);
             final int headerSize = headerValue.length();
             currentHeadersSize += headerSize;
@@ -447,9 +449,9 @@ public class HttpSenderOverHTTPTest
         int desiredHeadersSize = 35 * 1024;
         int currentHeadersSize = 0;
         int i = 0;
-        while(currentHeadersSize < desiredHeadersSize)
+        while (currentHeadersSize < desiredHeadersSize)
         {
-            final int index = i ++;
+            final int index = i++;
             final String headerValue = getRandomString(800);
             final int headerSize = headerValue.length();
             currentHeadersSize += headerSize;
