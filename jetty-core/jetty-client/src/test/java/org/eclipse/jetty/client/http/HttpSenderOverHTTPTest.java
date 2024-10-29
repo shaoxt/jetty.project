@@ -348,7 +348,8 @@ public class HttpSenderOverHTTPTest
             }
 
             @Override
-            public void onFailure(Request request, Throwable failure) {
+            public void onFailure(Request request, Throwable failure)
+            {
                 failureLatch.countDown();
             }
         });
@@ -374,29 +375,35 @@ public class HttpSenderOverHTTPTest
         int desiredHeadersSize = 20 * 1024;
         int currentHeadersSize = 0;
         int i = 0;
-        while(currentHeadersSize < desiredHeadersSize) {
+        while(currentHeadersSize < desiredHeadersSize)
+        {
             final int index = i ++;
             final String headerValue = getRandomString(800);
             final int headerSize = headerValue.length();
             currentHeadersSize += headerSize;
-            request.cookie(new HttpCookie() {
+            request.cookie(new HttpCookie()
+            {
                 @Override
-                public String getName() {
+                public String getName()
+                {
                     return "large" + index;
                 }
 
                 @Override
-                public String getValue() {
+                public String getValue()
+                {
                     return headerValue;
                 }
 
                 @Override
-                public int getVersion() {
+                public int getVersion()
+                {
                     return 0;
                 }
 
                 @Override
-                public Map<String, String> getAttributes() {
+                public Map<String, String> getAttributes()
+                {
                     return new HashMap<>();
                 }
             });
@@ -440,29 +447,35 @@ public class HttpSenderOverHTTPTest
         int desiredHeadersSize = 35 * 1024;
         int currentHeadersSize = 0;
         int i = 0;
-        while(currentHeadersSize < desiredHeadersSize) {
+        while(currentHeadersSize < desiredHeadersSize)
+        {
             final int index = i ++;
             final String headerValue = getRandomString(800);
             final int headerSize = headerValue.length();
             currentHeadersSize += headerSize;
-            request.cookie(new HttpCookie() {
+            request.cookie(new HttpCookie()
+            {
                 @Override
-                public String getName() {
+                public String getName()
+                {
                     return "large" + index;
                 }
 
                 @Override
-                public String getValue() {
+                public String getValue()
+                {
                     return headerValue;
                 }
 
                 @Override
-                public int getVersion() {
+                public int getVersion()
+                {
                     return 0;
                 }
 
                 @Override
-                public Map<String, String> getAttributes() {
+                public Map<String, String> getAttributes()
+                {
                     return new HashMap<>();
                 }
             });
