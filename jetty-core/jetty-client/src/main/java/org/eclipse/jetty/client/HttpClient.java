@@ -1144,7 +1144,8 @@ public class HttpClient extends ContainerLifeCycle implements AutoCloseable
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws Exception
+    {
         stop();
     }
 
@@ -1152,15 +1153,18 @@ public class HttpClient extends ContainerLifeCycle implements AutoCloseable
      * <p>Descendant beans of {@code HttpClient} that implement this interface
      * are made aware of the {@code HttpClient} instance while it is starting.</p>
      */
-    public interface Aware {
+    public interface Aware
+    {
         void setHttpClient(HttpClient httpClient);
     }
 
-    public int getMaxRequestHeadersSize() {
+    public int getMaxRequestHeadersSize()
+    {
         return maxRequestHeadersSize;
     }
 
-    public void setMaxRequestHeadersSize(int maxRequestHeadersSize) {
+    public void setMaxRequestHeadersSize(int maxRequestHeadersSize)
+    {
         this.maxRequestHeadersSize = maxRequestHeadersSize;
     }
 }
