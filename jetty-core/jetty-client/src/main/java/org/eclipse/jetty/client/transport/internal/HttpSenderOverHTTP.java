@@ -155,7 +155,7 @@ public class HttpSenderOverHTTP extends HttpSender
         protected Action process() throws Exception
         {
             HttpClient httpClient = getHttpChannel().getHttpDestination().getHttpClient();
-            HttpExchange exchange = getHttpExchange();
+            HttpExchange exchange = getHttpChannel().getHttpExchange();
             ByteBufferPool bufferPool = httpClient.getByteBufferPool();
             boolean useDirectByteBuffers = httpClient.isUseOutputDirectByteBuffers();
             while (true)
@@ -178,9 +178,21 @@ public class HttpSenderOverHTTP extends HttpSender
                     }
                     case HEADER_OVERFLOW:
                     {
-                        headerBuffer.release();
-                        headerBuffer = null;
-                        throw new IllegalArgumentException("Request header too large");
+                        int maxRequestHeadersSize = httpClient.getMaxRequestHeadersSize();
+                        if (headerBuffer.capacity() < maxRequestHeadersSize) {
+                            RetainableByteBuffer newHeaderBuffer = bufferPool.acquire(maxRequestHeadersSize, useDirectByteBuffers);
+                            headerBuffer.getByteBuffer().flip();
+                            newHeaderBuffer.getByteBuffer().put(headerBuffer.getByteBuffer());
+                            RetainableByteBuffer toRelease = headerBuffer;
+                            headerBuffer  = newHeaderBuffer;
+                            toRelease.release();
+                            break;
+                        }
+                        else {
+                            headerBuffer.release();
+                            headerBuffer = null;
+                            throw new IllegalArgumentException("Request header too large");
+                        }
                     }
                     case NEED_CHUNK:
                     {
@@ -235,9 +247,17 @@ public class HttpSenderOverHTTP extends HttpSender
         }
 
         @Override
-        protected void onSuccess()
+        public void succeeded()
         {
             release();
+            super.succeeded();
+        }
+
+        @Override
+        public void failed(Throwable x)
+        {
+            release();
+            super.failed(x);
         }
 
         @Override
@@ -251,7 +271,6 @@ public class HttpSenderOverHTTP extends HttpSender
         protected void onCompleteFailure(Throwable cause)
         {
             super.onCompleteFailure(cause);
-            release();
             callback.failed(cause);
         }
 
