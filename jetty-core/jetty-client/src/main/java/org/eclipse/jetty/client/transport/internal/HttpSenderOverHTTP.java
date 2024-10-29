@@ -247,24 +247,17 @@ public class HttpSenderOverHTTP extends HttpSender
         }
 
         @Override
-        public void succeeded()
+        protected void onSuccess()
         {
             release();
             super.succeeded();
         }
 
         @Override
-        public void failed(Throwable x)
-        {
-            release();
-            super.failed(x);
-        }
-
-        @Override
         protected void onCompleteSuccess()
         {
             super.onCompleteSuccess();
-            callback.succeeded();
+            release();
         }
 
         @Override
