@@ -931,7 +931,14 @@ public interface HttpFields extends Iterable<HttpField>, Supplier<HttpFields>
     static Map<String, List<String>> asMap(HttpFields fields)
     {
         Map<String, List<String>> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        fields.getFieldNamesCollection().forEach(name -> headers.putIfAbsent(name, fields.getValuesList(name)));
+        for (HttpField f : fields)
+        {
+            if (!headers.containsKey(f.getName()))
+            {
+                HttpHeader header = f.getHeader();
+                headers.put(f.getName(), header == null ? fields.getValuesList(f.getName()) : fields.getValuesList(header));
+            }
+        }
         return headers;
     }
 
