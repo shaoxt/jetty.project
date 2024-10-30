@@ -14,7 +14,6 @@
 package org.eclipse.jetty.ee10.websocket.server.internal;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 import jakarta.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.ee10.servlet.ServletContextResponse;
 import org.eclipse.jetty.ee10.websocket.server.JettyServerUpgradeResponse;
+import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.websocket.api.ExtensionConfig;
@@ -91,9 +91,7 @@ public class DelegatedServerUpgradeResponse implements JettyServerUpgradeRespons
     @Override
     public Map<String, List<String>> getHeaders()
     {
-        Map<String, List<String>> headers = getHeaderNames().stream()
-            .collect(Collectors.toMap((name) -> name, (name) -> new ArrayList<>(getHeaders(name))));
-        return Collections.unmodifiableMap(headers);
+        return Collections.unmodifiableMap(HttpFields.asMap(upgradeResponse.getHeaders()));
     }
 
     @Override

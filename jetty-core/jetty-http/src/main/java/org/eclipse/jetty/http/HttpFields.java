@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
@@ -925,6 +926,13 @@ public interface HttpFields extends Iterable<HttpField>, Supplier<HttpFields>
             size++;
         }
         return size;
+    }
+
+    static Map<String, List<String>> asMap(HttpFields fields)
+    {
+        Map<String, List<String>> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        fields.getFieldNamesCollection().forEach(name -> headers.putIfAbsent(name, fields.getValuesList(name)));
+        return headers;
     }
 
     /**
