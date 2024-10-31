@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.http.pathmap.PathSpec;
 import org.eclipse.jetty.server.Context;
 import org.eclipse.jetty.server.Handler;
@@ -359,14 +360,12 @@ public class ServerWebSocketContainer extends ContainerLifeCycle implements WebS
         {
             try
             {
-                Object webSocket = creator.createWebSocket(new ServerUpgradeRequestDelegate(rq), new ServerUpgradeResponseDelegate(rq, rs), cb);
-                if (webSocket == null)
-                    cb.succeeded();
-                return webSocket;
+                return creator.createWebSocket(new ServerUpgradeRequestDelegate(rq), new ServerUpgradeResponseDelegate(rq, rs), cb);
             }
             catch (Throwable x)
             {
-                cb.failed(x);
+                LOG.warn("Could not create WebSocket endpoint");
+                Response.writeError(rq, rs, cb, HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
                 return null;
             }
         };

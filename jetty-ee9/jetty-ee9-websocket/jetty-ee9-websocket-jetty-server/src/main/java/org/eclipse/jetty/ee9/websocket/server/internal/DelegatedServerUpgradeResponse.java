@@ -33,10 +33,17 @@ public class DelegatedServerUpgradeResponse implements JettyServerUpgradeRespons
 {
     private final ServerUpgradeResponse upgradeResponse;
     private final HttpServletResponse httpServletResponse;
+    private final boolean isUpgraded;
 
     public DelegatedServerUpgradeResponse(ServerUpgradeResponse response)
     {
+        this(response, false);
+    }
+
+    public DelegatedServerUpgradeResponse(ServerUpgradeResponse response, boolean isUpgraded)
+    {
         this.upgradeResponse = response;
+        this.isUpgraded = isUpgraded;
         this.httpServletResponse = (HttpServletResponse)response.getRequest()
             .getAttribute(WebSocketConstants.WEBSOCKET_WRAPPED_RESPONSE_ATTRIBUTE);
     }
@@ -47,6 +54,11 @@ public class DelegatedServerUpgradeResponse implements JettyServerUpgradeRespons
         // TODO: This should go to the httpServletResponse for headers but then it won't do interception of the websocket headers
         //  which are done through the jetty-core Response wrapping ServerUpgradeResponse done by websocket-core.
         upgradeResponse.getHeaders().add(name, value);
+    }
+
+    public void copyHeaders()
+    {
+        headers.forEach((key, values) -> upgradeResponse.getHeaders().put(key, values));
     }
 
     @Override
@@ -88,7 +100,10 @@ public class DelegatedServerUpgradeResponse implements JettyServerUpgradeRespons
     @Override
     public Map<String, List<String>> getHeaders()
     {
-        return Collections.unmodifiableMap(HttpFields.asMap(upgradeResponse.getHeaders()));
+        if (isUpgraded)
+            return Collections.unmodifiableMap(HttpFields.asMap(upgradeResponse.getHeaders()));
+        else
+            return HttpFields.asMap(upgradeResponse.getHeaders());
     }
 
     @Override

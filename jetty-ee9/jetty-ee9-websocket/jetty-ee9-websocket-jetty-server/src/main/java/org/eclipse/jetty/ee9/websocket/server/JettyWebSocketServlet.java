@@ -30,6 +30,7 @@ import org.eclipse.jetty.ee9.websocket.server.internal.DelegatedServerUpgradeReq
 import org.eclipse.jetty.ee9.websocket.server.internal.DelegatedServerUpgradeResponse;
 import org.eclipse.jetty.ee9.websocket.server.internal.JettyServerFrameHandlerFactory;
 import org.eclipse.jetty.ee9.websocket.servlet.WebSocketUpgradeFilter;
+import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.util.Callback;
@@ -299,23 +300,36 @@ public abstract class JettyWebSocketServlet extends HttpServlet
 
     private record WrappedJettyCreator(JettyWebSocketCreator creator) implements WebSocketCreator
     {
+
         private JettyWebSocketCreator getJettyWebSocketCreator()
         {
             return creator;
         }
 
         @Override
-        public Object createWebSocket(ServerUpgradeRequest request, ServerUpgradeResponse response, Callback callback)
+        public Object createWebSocket(ServerUpgradeRequest upgradeRequest, ServerUpgradeResponse upgradeResponse, Callback callback)
         {
+            DelegatedServerUpgradeRequest request = new DelegatedServerUpgradeRequest(upgradeRequest);
+            DelegatedServerUpgradeResponse response = new DelegatedServerUpgradeResponse(upgradeResponse);
             try
             {
-                Object webSocket = creator.createWebSocket(new DelegatedServerUpgradeRequest(request), new DelegatedServerUpgradeResponse(response));
-                callback.succeeded();
+                Object webSocket = creator.createWebSocket(request, response);
+                response.copyHeaders();
+                if (webSocket == null)
+                    callback.succeeded();
                 return webSocket;
             }
             catch (Throwable t)
             {
-                callback.failed(t);
+                try
+                {
+                    response.sendError(HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
+                    callback.succeeded();
+                }
+                catch (Throwable x)
+                {
+                    callback.failed(x);
+                }
                 return null;
             }
         }

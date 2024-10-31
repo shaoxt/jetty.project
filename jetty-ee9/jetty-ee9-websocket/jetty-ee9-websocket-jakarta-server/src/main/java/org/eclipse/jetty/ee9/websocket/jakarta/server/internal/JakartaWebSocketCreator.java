@@ -168,8 +168,8 @@ public class JakartaWebSocketCreator implements WebSocketCreator
         }
         catch (Throwable x)
         {
-            LOG.warn("Unable to create websocket: {}", config.getEndpointClass().getName(), x);
-            callback.failed(x);
+            LOG.warn("Unable to create WebSocket: {}", config.getEndpointClass().getName(), x);
+            Response.writeError(request, response, callback, HttpStatus.INTERNAL_SERVER_ERROR_500, "Unable to create WebSocket");
             return null;
         }
     }

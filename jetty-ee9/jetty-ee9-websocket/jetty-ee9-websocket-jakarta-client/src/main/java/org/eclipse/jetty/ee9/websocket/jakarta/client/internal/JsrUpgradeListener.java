@@ -13,6 +13,7 @@
 
 package org.eclipse.jetty.ee9.websocket.jakarta.client.internal;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +58,7 @@ public class JsrUpgradeListener implements UpgradeListener
         if (configurator == null)
             return;
 
-        HandshakeResponse handshakeResponse = () -> HttpFields.asMap(response.getHeaders());
+        HandshakeResponse handshakeResponse = () -> Collections.unmodifiableMap(HttpFields.asMap(response.getHeaders()));
         configurator.afterResponse(handshakeResponse);
     }
 }

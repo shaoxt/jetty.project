@@ -37,6 +37,7 @@ import org.eclipse.jetty.ee9.websocket.server.internal.DelegatedServerUpgradeReq
 import org.eclipse.jetty.ee9.websocket.server.internal.DelegatedServerUpgradeResponse;
 import org.eclipse.jetty.ee9.websocket.server.internal.JettyServerFrameHandlerFactory;
 import org.eclipse.jetty.ee9.websocket.servlet.WebSocketUpgradeFilter;
+import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.http.pathmap.PathSpec;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
@@ -155,12 +156,14 @@ public class JettyWebSocketServerContainer extends ContainerLifeCycle implements
             try
             {
                 Object webSocket = creator.createWebSocket(new DelegatedServerUpgradeRequest(req), new DelegatedServerUpgradeResponse(resp));
-                cb.succeeded();
+                if (webSocket == null)
+                    cb.succeeded();
                 return webSocket;
             }
             catch (Throwable t)
             {
-                cb.failed(t);
+                LOG.warn("Could not create WebSocket endpoint", t);
+                Response.writeError(req, resp, cb, HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
                 return null;
             }
         };
@@ -205,12 +208,14 @@ public class JettyWebSocketServerContainer extends ContainerLifeCycle implements
             try
             {
                 Object webSocket = creator.createWebSocket(new DelegatedServerUpgradeRequest(req), new DelegatedServerUpgradeResponse(resp));
-                cb.succeeded();
+                if (webSocket == null)
+                    Response.writeError(req, resp, cb, HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
                 return webSocket;
             }
             catch (Throwable t)
             {
-                cb.failed(t);
+                LOG.warn("Could not create WebSocket endpoint", t);
+                Response.writeError(req, resp, cb, HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
                 return null;
             }
         };

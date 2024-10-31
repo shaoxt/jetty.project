@@ -13,6 +13,7 @@
 
 package org.eclipse.jetty.websocket.server.internal;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +63,7 @@ class UpgradeResponseDelegate implements UpgradeResponse
     @Override
     public Map<String, List<String>> getHeaders()
     {
-        return HttpFields.asMap(response.getHeaders());
+        return Collections.unmodifiableMap(HttpFields.asMap(response.getHeaders()));
     }
 
     @Override
