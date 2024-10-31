@@ -620,7 +620,20 @@ public class HttpConnection extends AbstractMetaDataConnection implements Runnab
     {
         Runnable task = _httpChannel.onClose();
         if (task != null)
-            task.run();
+        {
+            ThreadPool.executeImmediately(getExecutor(), () ->
+            {
+                try
+                {
+                    task.run();
+                }
+                finally
+                {
+                    super.close();
+                }
+            });
+            return;
+        }
         super.close();
     }
 
@@ -642,7 +655,7 @@ public class HttpConnection extends AbstractMetaDataConnection implements Runnab
 
     public void asyncReadFillInterested()
     {
-        getEndPoint().tryFillInterested(_demandContentCallback);
+        tryFillInterested(_demandContentCallback);
     }
 
     @Override
@@ -1070,9 +1083,7 @@ public class HttpConnection extends AbstractMetaDataConnection implements Runnab
                     stream._chunk = Content.Chunk.from(bad);
                 }
 
-                Runnable todo = _httpChannel.onFailure(bad);
-                if (todo != null)
-                    getServer().getThreadPool().execute(todo);
+                ThreadPool.executeImmediately(getServer().getThreadPool(), _httpChannel.onFailure(bad));
             }
         }
     }
@@ -1363,21 +1374,24 @@ public class HttpConnection extends AbstractMetaDataConnection implements Runnab
         {
             if (_chunk != null)
             {
-                Runnable onContentAvailable = _httpChannel.onContentAvailable();
-                if (onContentAvailable != null)
-                    onContentAvailable.run();
+                invokeDemandCallback();
                 return;
             }
             parseAndFillForContent();
             if (_chunk != null)
             {
-                Runnable onContentAvailable = _httpChannel.onContentAvailable();
-                if (onContentAvailable != null)
-                    onContentAvailable.run();
+                invokeDemandCallback();
                 return;
             }
 
-            tryFillInterested(_demandContentCallback);
+            asyncReadFillInterested();
+        }
+
+        private void invokeDemandCallback()
+        {
+            Runnable onContentAvailable = _httpChannel.onContentAvailable();
+            if (onContentAvailable != null)
+                onContentAvailable.run();
         }
 
         @Override
