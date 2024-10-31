@@ -15,7 +15,6 @@ package org.eclipse.jetty.ee10.websocket.jakarta.tests.client;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Collections;
 import java.util.Date;
 
 import jakarta.websocket.ClientEndpoint;
@@ -78,7 +77,6 @@ public class AnnotatedClientEndpointTest
         @Override
         public void afterResponse(HandshakeResponse hr)
         {
-            hr.getHeaders().put("X-Test", Collections.singletonList("Extra"));
             super.afterResponse(hr);
         }
     }
