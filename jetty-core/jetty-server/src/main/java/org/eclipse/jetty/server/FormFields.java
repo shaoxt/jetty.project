@@ -142,6 +142,30 @@ public class FormFields extends ContentSourceCompletableFuture<Fields>
     }
 
     /**
+     * Get the Fields from a request. If the Fields have not been set, then attempt to parse them
+     * from the Request content, blocking if necessary.   If the Fields have previously been read asynchronously
+     * by {@link #onFields(Request, Promise.Invocable)} or similar, then those field will return
+     * and this method will not block.
+     * <p>
+     * Calls to {@code onFields} and {@code getFields} methods are idempotent, and
+     * can be called multiple times, with subsequent calls returning the results of the first call.
+     * @param source The {@link Content.Source} from which to read the fields.
+     * @param attributes The {@link Attributes} in which to look for an existing {@link CompletableFuture} of
+     *                   {@link FormFields}, using the classname as the attribute name.  If not found the attribute
+     *                   is set with the created {@link CompletableFuture} of {@link FormFields}.
+     * @param charset the {@link Charset} to use for byte to string conversion.     * @param maxFields The maximum number of fields to accept
+     * @param maxLength The maximum length of fields
+     * @return the Fields
+     * @see #onFields(Request, Promise.Invocable)
+     * @see #onFields(Request, Charset, Promise.Invocable)
+     * @see #getFields(Request)
+     */
+    public static Fields getFields(Content.Source source, Attributes attributes, Charset charset, int maxFields, int maxLength)
+    {
+        return from(source, InvocationType.NON_BLOCKING, attributes, charset, maxFields, maxLength).join();
+    }
+
+    /**
      * Asynchronously read and parse FormFields from a {@link Request}.
      * <p>
      * Calls to {@code onFields} and {@code getFields} methods are idempotent, and
