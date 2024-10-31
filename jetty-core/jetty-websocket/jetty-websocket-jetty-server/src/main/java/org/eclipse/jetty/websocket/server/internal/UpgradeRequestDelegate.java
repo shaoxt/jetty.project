@@ -16,7 +16,6 @@ package org.eclipse.jetty.websocket.server.internal;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +72,7 @@ class UpgradeRequestDelegate implements UpgradeRequest
     @Override
     public Map<String, List<String>> getHeaders()
     {
-        return Collections.unmodifiableMap(HttpFields.asMap(request.getHeaders()));
+        return HttpFields.asMap(request.getHeaders());
     }
 
     @Override

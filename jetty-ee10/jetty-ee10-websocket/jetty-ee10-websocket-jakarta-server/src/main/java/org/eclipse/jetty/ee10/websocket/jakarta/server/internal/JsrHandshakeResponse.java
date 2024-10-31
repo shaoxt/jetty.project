@@ -22,23 +22,16 @@ import org.eclipse.jetty.websocket.core.server.ServerUpgradeResponse;
 
 public class JsrHandshakeResponse implements HandshakeResponse
 {
-    private final ServerUpgradeResponse delegate;
     private final Map<String, List<String>> headers;
 
     public JsrHandshakeResponse(ServerUpgradeResponse resp)
     {
-        this.delegate = resp;
-        this.headers = HttpFields.asMap(delegate.getHeaders());
+        this.headers = HttpFields.asMap(resp.getHeaders());
     }
 
     @Override
     public Map<String, List<String>> getHeaders()
     {
         return headers;
-    }
-
-    public void setHeaders(Map<String, List<String>> headers)
-    {
-        headers.forEach((key, values) -> delegate.getHeaders().put(key, values));
     }
 }

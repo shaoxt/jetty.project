@@ -928,6 +928,10 @@ public interface HttpFields extends Iterable<HttpField>, Supplier<HttpFields>
         return size;
     }
 
+    /**
+     * @param fields the {@link HttpFields} to convert to a {@link Map}.
+     * @return an unmodifiable {@link Map} representing the contents of the {@link HttpFields}.
+     */
     static Map<String, List<String>> asMap(HttpFields fields)
     {
         Map<String, List<String>> headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -936,10 +940,20 @@ public interface HttpFields extends Iterable<HttpField>, Supplier<HttpFields>
             if (!headers.containsKey(f.getName()))
             {
                 HttpHeader header = f.getHeader();
-                headers.put(f.getName(), header == null ? fields.getValuesList(f.getName()) : fields.getValuesList(header));
+                List<String> values = header == null ? fields.getValuesList(f.getName()) : fields.getValuesList(header);
+                headers.put(f.getName(), Collections.unmodifiableList(values));
             }
         }
-        return headers;
+        return Collections.unmodifiableMap(headers);
+    }
+
+    /**
+     * @param fields the {@link HttpFields} to convert to a {@link Map}.
+     * @return a {@link Map} where changes to the contents will be reflected in the supplied {@link HttpFields}.
+     */
+    static Map<String, List<String>> asMap(HttpFields.Mutable fields)
+    {
+        return new HttpFieldsMap(fields);
     }
 
     /**

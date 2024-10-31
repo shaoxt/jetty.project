@@ -314,7 +314,6 @@ public abstract class JettyWebSocketServlet extends HttpServlet
             try
             {
                 Object webSocket = creator.createWebSocket(request, response);
-                response.copyHeaders();
                 if (webSocket == null)
                     callback.succeeded();
                 return webSocket;

@@ -13,7 +13,6 @@
 
 package org.eclipse.jetty.ee10.websocket.jakarta.client.internal;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -39,16 +38,11 @@ public class JsrUpgradeListener implements UpgradeListener
         if (configurator == null)
             return;
 
-        // Give headers to configurator
-        HttpFields fields = request.getHeaders();
-        Map<String, List<String>> originalHeaders = HttpFields.asMap(fields);
-        configurator.beforeRequest(originalHeaders);
-
-        // Reset headers on HttpRequest per configurator
         request.headers(headers ->
         {
-            headers.clear();
-            originalHeaders.forEach(headers::put);
+            // Give headers to configurator
+            Map<String, List<String>> headersMap = HttpFields.asMap(headers);
+            configurator.beforeRequest(headersMap);
         });
     }
 
@@ -58,7 +52,7 @@ public class JsrUpgradeListener implements UpgradeListener
         if (configurator == null)
             return;
 
-        HandshakeResponse handshakeResponse = () -> Collections.unmodifiableMap(HttpFields.asMap(response.getHeaders()));
+        HandshakeResponse handshakeResponse = () -> HttpFields.asMap(response.getHeaders());
         configurator.afterResponse(handshakeResponse);
     }
 }

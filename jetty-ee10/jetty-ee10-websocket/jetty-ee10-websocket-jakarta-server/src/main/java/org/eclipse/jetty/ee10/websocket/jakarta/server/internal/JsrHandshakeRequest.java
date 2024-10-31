@@ -15,7 +15,6 @@ package org.eclipse.jetty.ee10.websocket.jakarta.server.internal;
 
 import java.net.URI;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class JsrHandshakeRequest implements HandshakeRequest
     @Override
     public Map<String, List<String>> getHeaders()
     {
-        return Collections.unmodifiableMap(HttpFields.asMap(delegate.getHeaders()));
+        return HttpFields.asMap(delegate.getHeaders());
     }
 
     @Override

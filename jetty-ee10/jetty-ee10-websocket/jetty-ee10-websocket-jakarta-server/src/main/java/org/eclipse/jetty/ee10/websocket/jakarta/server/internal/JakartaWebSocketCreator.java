@@ -156,8 +156,6 @@ public class JakartaWebSocketCreator implements WebSocketCreator
 
         // [JSR] Step 5: Call modifyHandshake
         configurator.modifyHandshake(config, jsrHandshakeRequest, jsrHandshakeResponse);
-        // Set modified headers Map back into response properly
-        jsrHandshakeResponse.setHeaders(jsrHandshakeResponse.getHeaders());
 
         try
         {

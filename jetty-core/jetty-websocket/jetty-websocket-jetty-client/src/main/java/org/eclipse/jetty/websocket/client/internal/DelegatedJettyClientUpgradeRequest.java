@@ -79,7 +79,7 @@ public class DelegatedJettyClientUpgradeRequest implements UpgradeRequest
     @Override
     public Map<String, List<String>> getHeaders()
     {
-        return Collections.unmodifiableMap(HttpFields.asMap(delegate.getHeaders()));
+        return HttpFields.asMap(delegate.getHeaders());
     }
 
     @Override
