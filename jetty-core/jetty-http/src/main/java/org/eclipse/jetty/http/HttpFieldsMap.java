@@ -22,6 +22,10 @@ import java.util.Set;
 
 import org.eclipse.jetty.util.StringUtil;
 
+/**
+ * A {@link java.util.Map} which is backed by an instance of {@link HttpFields.Mutable}, such that any changes to the
+ * {@link java.util.Map} are reflected in the underlying instance of {@link HttpFields.Mutable}.
+ */
 class HttpFieldsMap extends AbstractMap<String, List<String>>
 {
     private final HttpFields.Mutable httpFields;

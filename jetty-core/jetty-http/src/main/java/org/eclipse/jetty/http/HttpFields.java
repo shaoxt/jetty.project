@@ -951,7 +951,7 @@ public interface HttpFields extends Iterable<HttpField>, Supplier<HttpFields>
      * @param fields the {@link HttpFields} to convert to a {@link Map}.
      * @return a {@link Map} where changes to the contents will be reflected in the supplied {@link HttpFields}.
      */
-    static Map<String, List<String>> asMap(HttpFields.Mutable fields)
+    static Map<String, List<String>> asMutableMap(HttpFields.Mutable fields)
     {
         return new HttpFieldsMap(fields);
     }

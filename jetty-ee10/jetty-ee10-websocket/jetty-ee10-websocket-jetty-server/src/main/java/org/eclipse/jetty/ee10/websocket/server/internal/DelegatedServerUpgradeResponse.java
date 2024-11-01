@@ -50,7 +50,7 @@ public class DelegatedServerUpgradeResponse implements JettyServerUpgradeRespons
         ServletContextResponse servletContextResponse = Response.as(response, ServletContextResponse.class);
         this.httpServletResponse = (HttpServletResponse)servletContextResponse.getRequest()
             .getAttribute(WebSocketConstants.WEBSOCKET_WRAPPED_RESPONSE_ATTRIBUTE);
-        headers = HttpFields.asMap(upgradeResponse.getHeaders());
+        headers = HttpFields.asMutableMap(upgradeResponse.getHeaders());
     }
 
     @Override

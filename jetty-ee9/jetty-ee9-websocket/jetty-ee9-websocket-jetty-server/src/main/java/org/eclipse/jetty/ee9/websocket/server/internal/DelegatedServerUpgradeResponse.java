@@ -87,7 +87,7 @@ public class DelegatedServerUpgradeResponse implements JettyServerUpgradeRespons
     @Override
     public Map<String, List<String>> getHeaders()
     {
-        return HttpFields.asMap(upgradeResponse.getHeaders());
+        return HttpFields.asMutableMap(upgradeResponse.getHeaders());
     }
 
     @Override
