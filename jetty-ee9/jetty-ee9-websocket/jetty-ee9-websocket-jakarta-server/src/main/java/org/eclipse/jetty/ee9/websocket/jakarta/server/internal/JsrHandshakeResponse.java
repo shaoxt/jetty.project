@@ -26,7 +26,7 @@ public class JsrHandshakeResponse implements HandshakeResponse
 
     public JsrHandshakeResponse(ServerUpgradeResponse resp)
     {
-        this.headers = HttpFields.asMutableMap(resp.getHeaders());
+        this.headers = HttpFields.asMap(resp.getHeaders());
     }
 
     @Override

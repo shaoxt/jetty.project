@@ -63,7 +63,7 @@ class UpgradeResponseDelegate implements UpgradeResponse
     @Override
     public Map<String, List<String>> getHeaders()
     {
-        return Collections.unmodifiableMap(HttpFields.asMutableMap(response.getHeaders()));
+        return Collections.unmodifiableMap(HttpFields.asMap(response.getHeaders()));
     }
 
     @Override

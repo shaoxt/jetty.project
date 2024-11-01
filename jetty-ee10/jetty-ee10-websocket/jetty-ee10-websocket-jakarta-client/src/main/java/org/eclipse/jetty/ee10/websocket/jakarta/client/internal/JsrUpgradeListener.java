@@ -41,7 +41,7 @@ public class JsrUpgradeListener implements UpgradeListener
         request.headers(headers ->
         {
             // Give headers to configurator
-            Map<String, List<String>> headersMap = HttpFields.asMutableMap(headers);
+            Map<String, List<String>> headersMap = HttpFields.asMap(headers);
             configurator.beforeRequest(headersMap);
         });
     }
