@@ -49,6 +49,20 @@ public class HttpConnectionFactory extends AbstractConnectionFactory implements 
         installBean(_config);
         setUseInputDirectByteBuffers(_config.isUseInputDirectByteBuffers());
         setUseOutputDirectByteBuffers(_config.isUseOutputDirectByteBuffers());
+        setInputBufferSize(_config.getInputBufferSize());
+    }
+
+    @Override
+    public void setInputBufferSize(int size)
+    {
+        super.setInputBufferSize(size);
+        _config.setInputBufferSize(size);
+    }
+
+    @Override
+    public int getInputBufferSize()
+    {
+        return _config.getInputBufferSize();
     }
 
     @Override
