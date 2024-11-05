@@ -162,7 +162,8 @@ public class JettyWebSocketServerContainer extends ContainerLifeCycle implements
             }
             catch (Throwable t)
             {
-                LOG.warn("Could not create WebSocket endpoint", t);
+                if (LOG.isDebugEnabled())
+                    LOG.debug("Could not create WebSocket endpoint", t);
                 Response.writeError(req, resp, cb, HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
                 return null;
             }
@@ -214,7 +215,8 @@ public class JettyWebSocketServerContainer extends ContainerLifeCycle implements
             }
             catch (Throwable t)
             {
-                LOG.warn("Could not create WebSocket endpoint", t);
+                if (LOG.isDebugEnabled())
+                    LOG.debug("Could not create WebSocket endpoint", t);
                 Response.writeError(req, resp, cb, HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
                 return null;
             }
