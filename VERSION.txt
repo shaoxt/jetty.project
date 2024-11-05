@@ -1,3 +1,5 @@
+jetty-12.1.0-SNAPSHOT
+
 jetty-12.1.0.alpha0 - 05 November 2024
  + 842 Implement RFC7239 support in Proxy and Middleman
  + 5685 AsyncProxyServlet calls onProxyResponseSuccess() when internally it
