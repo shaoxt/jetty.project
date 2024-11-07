@@ -134,11 +134,13 @@ public class HttpClientTransportOverHTTP extends AbstractConnectorHttpClientTran
      * @return The maximum allowed size in bytes for the HTTP request headers
      */
     @ManagedAttribute("The maximum allowed size in bytes for the HTTP request headers")
-    public int getMaxRequestHeadersSize() {
+    public int getMaxRequestHeadersSize()
+    {
         return maxRequestHeadersSize;
     }
 
-    public void setMaxRequestHeadersSize(int maxRequestHeadersSize) {
+    public void setMaxRequestHeadersSize(int maxRequestHeadersSize)
+    {
         this.maxRequestHeadersSize = maxRequestHeadersSize;
     }
 }
