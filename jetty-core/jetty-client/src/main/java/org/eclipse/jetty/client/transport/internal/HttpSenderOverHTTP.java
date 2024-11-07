@@ -27,6 +27,7 @@ import org.eclipse.jetty.http.HttpURI;
 import org.eclipse.jetty.http.MetaData;
 import org.eclipse.jetty.io.ByteBufferPool;
 import org.eclipse.jetty.io.Content;
+import org.eclipse.jetty.io.Retainable;
 import org.eclipse.jetty.io.EndPoint;
 import org.eclipse.jetty.io.RetainableByteBuffer;
 import org.eclipse.jetty.util.BufferUtil;
@@ -259,8 +260,9 @@ public class HttpSenderOverHTTP extends HttpSender
         @Override
         protected void onSuccess()
         {
-            release();
-            super.succeeded();
+            headerBuffer = Retainable.release(headerBuffer);
+            chunkBuffer = Retainable.release(chunkBuffer);
+            contentByteBuffer = null;
         }
 
         @Override
@@ -269,22 +271,17 @@ public class HttpSenderOverHTTP extends HttpSender
             super.onCompleteSuccess();
             callback.succeeded();
         }
+        @Override
+        protected void onFailure(Throwable cause)
+        {
+            callback.failed(cause);
+        }
 
         @Override
         protected void onCompleteFailure(Throwable cause)
         {
-            super.onCompleteFailure(cause);
-            release();
-        }
-
-        private void release()
-        {
-            if (headerBuffer != null)
-                headerBuffer.release();
-            headerBuffer = null;
-            if (chunkBuffer != null)
-                chunkBuffer.release();
-            chunkBuffer = null;
+            headerBuffer = Retainable.release(headerBuffer);
+            chunkBuffer = Retainable.release(chunkBuffer);
             contentByteBuffer = null;
         }
     }
