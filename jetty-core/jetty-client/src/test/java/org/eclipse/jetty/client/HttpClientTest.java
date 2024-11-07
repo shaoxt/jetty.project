@@ -32,8 +32,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Exchanger;
@@ -2015,7 +2015,6 @@ public class HttpClientTest extends AbstractHttpClientServerTest
                 .send(this);
         }
     }
-
 
     private static Random rnd = new Random();
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
