@@ -16,7 +16,9 @@ package org.eclipse.jetty.client.transport.internal;
 import java.nio.ByteBuffer;
 
 import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.HttpClientTransport;
 import org.eclipse.jetty.client.HttpRequestException;
+import org.eclipse.jetty.client.transport.HttpClientTransportOverHTTP;
 import org.eclipse.jetty.client.transport.HttpExchange;
 import org.eclipse.jetty.client.transport.HttpRequest;
 import org.eclipse.jetty.client.transport.HttpSender;
@@ -178,7 +180,13 @@ public class HttpSenderOverHTTP extends HttpSender
                     }
                     case HEADER_OVERFLOW:
                     {
-                        int maxRequestHeadersSize = httpClient.getMaxRequestHeadersSize();
+                        int maxRequestHeadersSize = -1;
+                        //For HTTP1.1 only
+                        HttpClientTransport transport = httpClient.getTransport();
+                        if (transport instanceof HttpClientTransportOverHTTP httpTransport)
+                        {
+                            maxRequestHeadersSize = httpTransport.getMaxRequestHeadersSize();
+                        }
                         if (headerBuffer.capacity() < maxRequestHeadersSize)
                         {
                             RetainableByteBuffer newHeaderBuffer = bufferPool.acquire(maxRequestHeadersSize, useDirectByteBuffers);

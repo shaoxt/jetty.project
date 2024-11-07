@@ -135,7 +135,7 @@ public class HttpClient extends ContainerLifeCycle implements AutoCloseable
     private String defaultRequestContentType = "application/octet-stream";
     private boolean useInputDirectByteBuffers = true;
     private boolean useOutputDirectByteBuffers = true;
-    private int maxRequestHeadersSize = 32 * 1024;
+    
     private int maxResponseHeadersSize = -1;
     private Sweeper destinationSweeper;
 
@@ -1156,15 +1156,5 @@ public class HttpClient extends ContainerLifeCycle implements AutoCloseable
     public interface Aware
     {
         void setHttpClient(HttpClient httpClient);
-    }
-
-    public int getMaxRequestHeadersSize()
-    {
-        return maxRequestHeadersSize;
-    }
-
-    public void setMaxRequestHeadersSize(int maxRequestHeadersSize)
-    {
-        this.maxRequestHeadersSize = maxRequestHeadersSize;
     }
 }
