@@ -271,6 +271,7 @@ public class HttpSenderOverHTTP extends HttpSender
             super.onCompleteSuccess();
             callback.succeeded();
         }
+
         @Override
         protected void onFailure(Throwable cause)
         {
@@ -357,7 +358,6 @@ public class HttpSenderOverHTTP extends HttpSender
         protected void onCompleteFailure(Throwable cause)
         {
             release();
-            callback.failed(cause);
         }
 
         private void release()
