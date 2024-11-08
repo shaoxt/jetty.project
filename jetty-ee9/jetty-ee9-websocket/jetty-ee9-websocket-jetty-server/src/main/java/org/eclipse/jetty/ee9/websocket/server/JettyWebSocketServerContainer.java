@@ -37,7 +37,6 @@ import org.eclipse.jetty.ee9.websocket.server.internal.DelegatedServerUpgradeReq
 import org.eclipse.jetty.ee9.websocket.server.internal.DelegatedServerUpgradeResponse;
 import org.eclipse.jetty.ee9.websocket.server.internal.JettyServerFrameHandlerFactory;
 import org.eclipse.jetty.ee9.websocket.servlet.WebSocketUpgradeFilter;
-import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.http.pathmap.PathSpec;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
@@ -164,7 +163,7 @@ public class JettyWebSocketServerContainer extends ContainerLifeCycle implements
             {
                 if (LOG.isDebugEnabled())
                     LOG.debug("Could not create WebSocket endpoint", t);
-                Response.writeError(req, resp, cb, HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
+                cb.failed(t);
                 return null;
             }
         };
@@ -210,14 +209,14 @@ public class JettyWebSocketServerContainer extends ContainerLifeCycle implements
             {
                 Object webSocket = creator.createWebSocket(new DelegatedServerUpgradeRequest(req), new DelegatedServerUpgradeResponse(resp));
                 if (webSocket == null)
-                    Response.writeError(req, resp, cb, HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
+                    cb.succeeded();
                 return webSocket;
             }
             catch (Throwable t)
             {
                 if (LOG.isDebugEnabled())
                     LOG.debug("Could not create WebSocket endpoint", t);
-                Response.writeError(req, resp, cb, HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
+                cb.failed(t);
                 return null;
             }
         };

@@ -15,9 +15,7 @@ package org.eclipse.jetty.websocket.core.server.internal;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Context;
-import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.util.Callback;
 import org.eclipse.jetty.websocket.core.FrameHandler;
 import org.eclipse.jetty.websocket.core.server.FrameHandlerFactory;
@@ -61,7 +59,7 @@ public class CreatorNegotiator extends WebSocketNegotiator.AbstractNegotiator
         }
         catch (Throwable t)
         {
-            Response.writeError(request, response, callback, HttpStatus.INTERNAL_SERVER_ERROR_500, t.getMessage());
+            callback.failed(t);
             return null;
         }
 
@@ -70,7 +68,7 @@ public class CreatorNegotiator extends WebSocketNegotiator.AbstractNegotiator
 
         FrameHandler frameHandler = factory.newFrameHandler(websocketPojo, request, response);
         if (frameHandler == null)
-            Response.writeError(request, response, callback, HttpStatus.INTERNAL_SERVER_ERROR_500, "No WebSocket FrameHandler was created");
+            callback.failed(new IllegalStateException("No WebSocket FrameHandler was created"));
         return frameHandler;
     }
 

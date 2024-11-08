@@ -168,7 +168,7 @@ public class JakartaWebSocketCreator implements WebSocketCreator
         {
             if (LOG.isDebugEnabled())
                 LOG.debug("Unable to create WebSocket: {}", config.getEndpointClass().getName(), x);
-            Response.writeError(request, response, callback, HttpStatus.INTERNAL_SERVER_ERROR_500, "Unable to create WebSocket");
+            callback.failed(x);
             return null;
         }
     }

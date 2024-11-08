@@ -30,7 +30,6 @@ import org.eclipse.jetty.ee9.websocket.server.internal.DelegatedServerUpgradeReq
 import org.eclipse.jetty.ee9.websocket.server.internal.DelegatedServerUpgradeResponse;
 import org.eclipse.jetty.ee9.websocket.server.internal.JettyServerFrameHandlerFactory;
 import org.eclipse.jetty.ee9.websocket.servlet.WebSocketUpgradeFilter;
-import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.util.Callback;
@@ -320,15 +319,7 @@ public abstract class JettyWebSocketServlet extends HttpServlet
             }
             catch (Throwable t)
             {
-                try
-                {
-                    response.sendError(HttpStatus.INTERNAL_SERVER_ERROR_500, "Could not create WebSocket endpoint");
-                    callback.succeeded();
-                }
-                catch (Throwable x)
-                {
-                    callback.failed(x);
-                }
+                callback.failed(t);
                 return null;
             }
         }
