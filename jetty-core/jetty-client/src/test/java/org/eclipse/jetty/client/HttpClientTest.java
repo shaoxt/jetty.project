@@ -2032,9 +2032,11 @@ public class HttpClientTest extends AbstractHttpClientServerTest
         return sb.toString();
     }
 
-    @Test
-    public void testSmallHeadersSize() throws Exception
+    @ParameterizedTest
+    @ArgumentsSource(ScenarioProvider.class)
+    public void testSmallHeadersSize(Scenario scenario) throws Exception
     {
+        startClient(scenario);
         ByteArrayEndPoint endPoint = new ByteArrayEndPoint();
         HttpDestination destination = new HttpDestination(client, new Origin("http", "localhost", 8080));
         destination.start();
@@ -2072,9 +2074,11 @@ public class HttpClientTest extends AbstractHttpClientServerTest
         assertTrue(successLatch.await(5, TimeUnit.SECONDS));
     }
 
-    @Test
-    public void testMaxRequestHeadersSize() throws Exception
+    @ParameterizedTest
+    @ArgumentsSource(ScenarioProvider.class)
+    public void testMaxRequestHeadersSize(Scenario scenario) throws Exception
     {
+        startClient(scenario);
         byte[] buffer = new byte[32 * 1024];
         ByteArrayEndPoint endPoint = new ByteArrayEndPoint(buffer, buffer.length);
         HttpDestination destination = new HttpDestination(client, new Origin("http", "localhost", 8080));
@@ -2144,9 +2148,11 @@ public class HttpClientTest extends AbstractHttpClientServerTest
         assertTrue(successLatch.await(5, TimeUnit.SECONDS));
     }
 
-    @Test
-    public void testMaxRequestHeadersSizeOverflow() throws Exception
+    @ParameterizedTest
+    @ArgumentsSource(ScenarioProvider.class)
+    public void testMaxRequestHeadersSizeOverflow(Scenario scenario) throws Exception
     {
+        startClient(scenario);
         byte[] buffer = new byte[32 * 1024];
         ByteArrayEndPoint endPoint = new ByteArrayEndPoint(buffer, buffer.length);
         HttpDestination destination = new HttpDestination(client, new Origin("http", "localhost", 8080));
